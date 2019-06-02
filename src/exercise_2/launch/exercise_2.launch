@@ -1,0 +1,18 @@
+<launch>
+
+  <!-- Load the URDF/Xacro model of our robot -->
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find urdf_exercise)/urdf/4_car_skeleton.xacro'" />
+  <param name="robot_description" command="$(arg urdf_file)" />
+
+  <!-- Run the map server with a blank map -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find exercise_2)/maps/blank_map.yaml"/>
+
+  <!-- Run a static transform between /odom and /map -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
+
+   <node pkg="exercise_2" type="exercise_2_node" name="exercise_2_node" output="screen"/>
+
+   <!-- Run rviz display -->
+   <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find exercise_2)/nav.rviz" output="screen"/>
+
+</launch>
